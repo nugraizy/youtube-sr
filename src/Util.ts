@@ -237,11 +237,13 @@ class Util {
         if (!data || !data.videoRenderer) return;
 
         const badge = data.videoRenderer.ownerBadges && data.videoRenderer.ownerBadges[0];
+        const description = data.videoRenderer.detailedMetadataSnippets?.[0]?.snippetText && data.videoRenderer.detailedMetadataSnippets?.[0].snippetText.runs?.[0] ? data.videoRenderer.detailedMetadataSnippets?.[0].snippetText?.runs.map(({ text }: { text: string }) => text).join('\n') : ""
+
         let res = new Video({
             id: data.videoRenderer.videoId,
             url: `https://www.youtube.com/watch?v=${data.videoRenderer.videoId}`,
             title: data.videoRenderer.title.runs[0].text,
-            description: data.videoRenderer.descriptionSnippet && data.videoRenderer.descriptionSnippet.runs[0] ? data.videoRenderer.descriptionSnippet.runs[0].text : "",
+            description,
             duration: data.videoRenderer.lengthText ? Util.parseDuration(data.videoRenderer.lengthText.simpleText) : 0,
             duration_raw: data.videoRenderer.lengthText ? data.videoRenderer.lengthText.simpleText : null,
             thumbnail: {
